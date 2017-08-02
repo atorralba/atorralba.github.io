@@ -1,0 +1,55 @@
+==================================================================
+https://keybase.io/atorralba
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://atorralba.github.io
+  * I am atorralba (https://keybase.io/atorralba) on keybase.
+  * I have a public key ASAO5XUuMDjALxbuIiFvb5zXvhUJZimNkPggLWCzESDiCgo
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "01200ee5752e3038c02f16ee22216f6f9cd7be150966298d90f8202d60b31120e20a0a",
+            "host": "keybase.io",
+            "kid": "01200ee5752e3038c02f16ee22216f6f9cd7be150966298d90f8202d60b31120e20a0a",
+            "uid": "cc4a220a13ce5de2ac3e0aed8b5b9319",
+            "username": "atorralba"
+        },
+        "merkle_root": {
+            "ctime": 1499797720,
+            "hash": "5834724573c02b80604cf2c0b3f26c1086a8c9be496439d49892a5a1830abef6a83ae048388406634977d76caa26a1950297bfcf3ad8a27bf854293194841a7f",
+            "hash_meta": "9e5057a4a996db3990fe153d33ce29141d7cd960728cb0a7ba32769893a54273",
+            "seqno": 1225834
+        },
+        "service": {
+            "hostname": "atorralba.github.io",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "client": {
+        "name": "keybase.io go client",
+        "version": "1.0.25"
+    },
+    "ctime": 1499797745,
+    "expire_in": 504576000,
+    "prev": "88d041d392b7e8ea5a778b63f8d45fb05a8062745f9d9afe0a98b23bf17c0b77",
+    "seqno": 6,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgDuV1LjA4wC8W7iIhb2+c174VCWYpjZD4IC1gsxEg4goKp3BheWxvYWTFA0x7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTIwMGVlNTc1MmUzMDM4YzAyZjE2ZWUyMjIxNmY2ZjljZDdiZTE1MDk2NjI5OGQ5MGY4MjAyZDYwYjMxMTIwZTIwYTBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwMGVlNTc1MmUzMDM4YzAyZjE2ZWUyMjIxNmY2ZjljZDdiZTE1MDk2NjI5OGQ5MGY4MjAyZDYwYjMxMTIwZTIwYTBhIiwidWlkIjoiY2M0YTIyMGExM2NlNWRlMmFjM2UwYWVkOGI1YjkzMTkiLCJ1c2VybmFtZSI6ImF0b3JyYWxiYSJ9LCJtZXJrbGVfcm9vdCI6eyJjdGltZSI6MTQ5OTc5NzcyMCwiaGFzaCI6IjU4MzQ3MjQ1NzNjMDJiODA2MDRjZjJjMGIzZjI2YzEwODZhOGM5YmU0OTY0MzlkNDk4OTJhNWExODMwYWJlZjZhODNhZTA0ODM4ODQwNjYzNDk3N2Q3NmNhYTI2YTE5NTAyOTdiZmNmM2FkOGEyN2JmODU0MjkzMTk0ODQxYTdmIiwiaGFzaF9tZXRhIjoiOWU1MDU3YTRhOTk2ZGIzOTkwZmUxNTNkMzNjZTI5MTQxZDdjZDk2MDcyOGNiMGE3YmEzMjc2OTg5M2E1NDI3MyIsInNlcW5vIjoxMjI1ODM0fSwic2VydmljZSI6eyJob3N0bmFtZSI6ImF0b3JyYWxiYS5naXRodWIuaW8iLCJwcm90b2NvbCI6Imh0dHBzOiJ9LCJ0eXBlIjoid2ViX3NlcnZpY2VfYmluZGluZyIsInZlcnNpb24iOjF9LCJjbGllbnQiOnsibmFtZSI6ImtleWJhc2UuaW8gZ28gY2xpZW50IiwidmVyc2lvbiI6IjEuMC4yNSJ9LCJjdGltZSI6MTQ5OTc5Nzc0NSwiZXhwaXJlX2luIjo1MDQ1NzYwMDAsInByZXYiOiI4OGQwNDFkMzkyYjdlOGVhNWE3NzhiNjNmOGQ0NWZiMDVhODA2Mjc0NWY5ZDlhZmUwYTk4YjIzYmYxN2MwYjc3Iiwic2Vxbm8iOjYsInRhZyI6InNpZ25hdHVyZSJ9o3NpZ8RAsQ6FeMiRpGsTC+gjRJOAXUuAKPB6uwmBgvHdlYksrOZMMsFjNHqGzPdikSUcbMVORri9Nj0vUYgg/ksrdqBABahzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIALmNO2NM4eagX7DcdDgrpd3T3iSt6mQYIKIl3zGxmIxo3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/atorralba
+
+==================================================================
