@@ -19,10 +19,10 @@ The reading helped me with two things: firstly, learning a bit more about White-
 
 I started poking the binary to try to understand what it was doing. It seemed quite simple: given a 16-byte input, an encrypted 16-byte output was returned.
 
-~~~~bash
+```bash
 $ ./whitebox AAAABBBBCCCCDDDD
 18 20 4c 40 8d 7b c0 f9 2c c8 07 7d a6 94 27 42
-~~~~
+```
 
 It also seemed interesting that even when less than 16 bytes were given the output had 16 bytes anyway. It was absolutely too soon to tell, but if I had to do so at the moment, I would've said that we were facing an **AES 128** White-Box implementation. I decided to keep that consideration until reality proved me wrong, and so I spent another good amount of time reading about that specific algorithm, trying to understand how it works.
 
@@ -56,7 +56,7 @@ Now that we were pretty sure that we were facing an AES algorithm and had an app
 
 After a little tinkering, I wrote this dirty but functional "script" that injects a byte-long fault in the specified memory address for the desired AES round:
 
-~~~~bash
+```bash
 b *0x4636EA
 ignore 1 $round
 run AAAABBBBCCCCDDDD
@@ -65,7 +65,7 @@ print /x 0x7fffffffeb20+$offset
 set *(char*)$1=$fault
 c
 quit
-~~~~
+```
 
 In short, what it does is:
 
@@ -80,7 +80,7 @@ In short, what it does is:
 
 So, with this, we have the ability to inject an arbitrary fault in an arbitrary matrix position for any of the AES rounds. Now we want to do this for *every* round, *every* position and a handful of faults. Again, the following ugly script achieves this:
 
-~~~~bash
+```bash
 rounds=('10 9 8 7 6 5 4 3 2')
 faults=('0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x48 0xff 0x00')
 offsets=('0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15')
@@ -93,11 +93,11 @@ for round in ${rounds[@]}; do
 		done
 	done
 done
-~~~~
+```
 
 I know this is horrible (so please don't hate too much), but it does the trick: after the execution, 9 `round<i>.log` files are generated, the first line of each is the unmodified, encrypted output for the input string `AAAABBBBCCCCDDDD`, and the rest are faulty outputs for the specified round. With this files, I finally could summon the phoenix and use JeanGrey to try and get the keys of each AES round. With that in mind I wrote the following python script:
 
-~~~~python
+```python
 import phoenixAES
 
 foundkey = True
@@ -118,7 +118,7 @@ while foundkey and round > 1:
 with open('lastroundkeys.lst','w+') as f:
     for key in lastroundkeys:
         f.write("%s\n" % key)
-~~~~
+```
 
 Which basically tries to find the key of round 10 with that round's faulty outputs, and if successful, tries the same with round 9 plus round 10 key, and so on until all keys are recovered. I was very excited when I saw the output:
 
@@ -163,13 +163,13 @@ The important point is that I discovered that Deadpool has a mode in which it's 
 
 Now it was only a matter of reversing the first stages of the AES algorithm to obtain the full key. I stole some more code from the good guys at [SideChannelMarvels][3] to perform just that:
 
-~~~~python
+```python
 cint,_,_ = engine.doit(engine.goldendata, processinput(p, 16), lastroundkeys=[])
 c = [(cint>>(i<<3) & 0xff) for i in range(16)][::-1]
 kr0 = phoenixAES.rewind(cint, lastroundkeys, encrypt=encrypt, mimiclastround=False)
 
 found_key = '%032X' % kr0
-~~~~
+```
 
 And then:
 
@@ -182,10 +182,10 @@ First round key found?:
 
 My hands trembled at this point, writing which I hoped was the last line of code to obtain the flag of the challenge:
 
-~~~~python
+```python
 >>>'61316C5F7434623133355F525F6F5235'.decode('hex')
 'a1l_t4b135_R_oR5'
-~~~~
+```
 
 Is it the flag? It looks like the flag! We got the flag! \o/
 

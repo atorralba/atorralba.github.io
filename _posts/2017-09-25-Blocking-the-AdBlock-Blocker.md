@@ -22,7 +22,7 @@ That flawless logic gives me 100% legit pretext to *"ethically"*® "audit"™ yo
 
 So, with the almighty **Firefox Developer Tools**, we can search for the id of the ~~annoying~~ warning that blocks the video reproduction. After 30 *complete* seconds, we find that said id, `mensaje-adblock`, is being used in a script called `player.bundle.js`, and oh man it's FULL of obfuscated GARBAGE. There are references everywhere to open source tools like [this one][2] or [this one][3], so I imagine a more sophisticated professional who was *totally not like me* would investigate said tools and try to understand what the obfuscated code is doing. But since I'm a total script-kiddie, I just *furiously* **copy-paste** all the code into a [tool][4] that better engineers than me offered to the world in a complete display of love for humanity. This is what I get:
 
-~~~~javascript
+```javascript
 function(e) {
     function t(n) {
         if (o[n]) return o[n].exports;
@@ -103,13 +103,13 @@ function(e) {
     }
   }
 );
-~~~~
+```
 
 Okay, I'll stop pretending I understand *any of that* and focus on the single line that catches my otherwise shamefully short attention span.
 
-~~~~javascript
+```javascript
 videojs.plugin("adblockDetectPlugin", a)
-~~~~
+```
 
 Now, if we look for the variable `a`, we see it's actually a function and contains the definition of a handful of other functions with original names like `t`, `o` and of course our little friend `n`. We are totally not in the mood to try to reverse-engineering *all that* because ~~we want to see our damn video~~ damn, have you seen *how many lines of **code** are there*?. Jesus, give me a *break*. So, let's make a completely **educated** guess and say that `a` is the magic function that decides what happens when that *evil and illegal* `videojs.plugin` discovers we are running an ad-blocker. And it decides it won't play the video, apparently.
 
@@ -117,9 +117,9 @@ Now, if we look for the variable `a`, we see it's actually a function and contai
 
 It could be argued it's worth a shot to try and call again `videojs.plugin`, but this time passing as second argument a function that does, like, *absolutely nothing*. Almost as if we were telling this guy: "do you see this good Samaritan over there? Yes, that one. If by *any chance* you detect he's running any kind of ad-blocker, you can like *totally* chill, NO, seriously, just let him be. Are we good?". The rocket-science, over-the-top code I *engineered* to accomplish that is the following. Are you ready? Take a deep breath because this is *next-level programming*:
 
-~~~~javascript
+```javascript
 videojs.plugin("adblockDetectPlugin", function(){});
-~~~~
+```
 
 And, guess what. It. *Works*. The video plays smoothly, 100% *ad free*, with our ad-blocker guy freely running up there, like God intended him to be. Now, **of course**, as a completely "ethical"℠ member of the infosec community, I *totally* stopped the video right there and reloaded the page in order to enjoy my minute-and-a-half of delicious ads because I'm a good guy and don't want problems with law enforcement and I would **never** commit ~*crimes*~.
 

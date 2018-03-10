@@ -9,7 +9,7 @@ This was my first year attending [r2con](http://radare.org/con/2017/), and I can
 
 After downloading the [binary](http://radare.org/con/2017/crk/files/spacemision), let's copy it into a docker container (one never knows) and execute it right away. The following appears on screen:
 
-~~~~
+```
 $ chmod +x spacemission && ./spacemission
 Hello, ...?
 Hello, chief reverse engineer root of the spaceship rbinsegfaulter?
@@ -25,13 +25,13 @@ If you can hear this message, hurry up and create an instruction file for the ro
 Note, that the battery, of the rover is very low.
 Restart this communication program, to transmit the instruction file
 Good luck!
-~~~~
+```
 
 Ok, sounds fun! We have to save this poor planet from destruction by disarming the bombs left behind by these evil aliens. But, mmm, **how** do we do it?
 
 The binary seems to ignore any parameter passed to it on invocation, so it seems that we need to follow the instructions given to us and create an instruction file. But we don't even know the name of the file, not to say the contents of it, so it's time to load the binary into `radare2` and see what happens!
 
-~~~~
+```
 $ r2 -d spacemision
 Process with PID 517 started...
 = attach 517 517
@@ -40,11 +40,11 @@ Using 0x400000
 asm.bits 64
  -- You can mark an offset in visual mode with the cursor and the ',' key. Later press '.' to go back
 [0x7f1922718c30]>
-~~~~
+```
 
 Let's analyze everything since the binary isn't too large, and then navigate to the main function to see what's there:
 
-~~~~
+```
 [0x7f1922718c30]> aaa
 [x] Analyze all flags starting with sym. and entry0 (aa)
 TODO: esil-vm not initialized
@@ -88,11 +88,11 @@ ptrace (PT_ATTACH): Operation not permitted
 |      |    0x00400bef      b800000000     mov eax, 0
 |      |    0x00400bf4      e8d4fdffff     call sub.calloc_9cd         ; void *calloc(size_t nmeb, size_t size)
 [0x00400ba0]>
-~~~~
+```
 
 Alright, it seems pretty clear how our file must be named. The string `robot_instructions` before the `sym.imp.open` call is a pretty decent hint! Let's create it and try again:
 
-~~~~
+```
 $ touch robot_instructions
 $ ./spacemision
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -116,7 +116,7 @@ X                                      X
 X                                      X
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 BOOOOOOM!!!
-~~~~
+```
 
 Cool! Even our inactivity caused the bomb to explode, we at least got what seems like a map in our screen. Now we should try to understand how our rover is moved, i.e. what commands we have to write into the `robot_instructions` file.
 
@@ -124,21 +124,21 @@ Cool! Even our inactivity caused the bomb to explode, we at least got what seems
 
 Once opened, a file must be read, so a good place to look at should be around `sym.imp.read` calls.
 
-~~~~
+```
 [0x00400ba0]> axt sym.imp.read
 call 0x4009c2 call sym.imp.read in sub.read_9a6
-~~~~
+```
 
 Ok, `sym.imp.read` is called inside the function `sub.read_9a6`, where is that function called from?
 
-~~~~
+```
 [0x00400ba0]> axt sub.read_9a6
 call 0x401633 call sub.read_9a6 in main
-~~~~
+```
 
 Aha! Let's take a look:
 
-~~~~
+```
 [0x00400ba0]> s 0x401633
 0x00401633]> pd 20
 |           0x00401633      e86ef3ffff     call sub.read_9a6           ; ssize_t read(int fildes, void *buf, size_t nbyte)
@@ -158,7 +158,7 @@ Aha! Let's take a look:
 |   |||||   0x00401665      83f879         cmp eax, 0x79               ; 'y' ; 'y' ; 121
 |  ,======< 0x00401668      0f84ed010000   je 0x40185b
 | ,=======< 0x0040166e      e9ff010000     jmp 0x401872
-~~~~
+```
 
 Perfect, it seems our guessing was right! The file seems to be read, one byte at a time,and then compared to one of the following characters: `^`,`<`,`>`,`v`,`y`. The first four seem quite obvious: the rover probably goes up, left, right and down respectively each time one of these characters is read. A quick test shows we are right, as a little arrow appears on screen performing the moves we introduce into the `robot_instructions` file.
 
@@ -168,7 +168,7 @@ But, there's that `y` command which doesn't directly translate to any movement (
 
 Following the `jmp` address we can try to see what happens with this command:
 
-~~~~
+```
 [0x00401633]> s 0x40185b
 [0x0040185b] pd 6
 |           0x0040185b      8b15e3182000   mov edx, dword [0x00603144] ; [0x603144:4]=0
@@ -177,11 +177,11 @@ Following the `jmp` address we can try to see what happens with this command:
 |           0x00401869      89c7           mov edi, eax
 |           0x0040186b      e87af2ffff     call fcn.00400aea
 |       ,=< 0x00401870      eb04           jmp 0x401876
-~~~~
+```
 
 Hmmm. Two values are read from memory (`0x00603144` and `0x00603140`), moved to registers and then a function is called. Following the breadcrumbs:
 
-~~~~
+```
 [0x0040185b]> s fcn.00400aea
 [0x00400aea]> pd 34
 / (fcn) fcn.00400aea 108
@@ -227,7 +227,7 @@ Hmmm. Two values are read from memory (`0x00603144` and `0x00603140`), moved to 
 |           0x00400b53      90             nop
 |           0x00400b54      5d             pop rbp
 \           0x00400b55      c3             ret
-~~~~
+```
 
 Wow, this one's a little bigger. Let's try to understand it step by step. First, the two values previously read from memory (now saved into `edi` and `esi`) are moved into two local variables, `local_14h` and `local_18h`. Then, a series of transformations are applied to these values. Summarized:
 
@@ -251,15 +251,15 @@ This is getting interesting! We only have to get the 7 bomb positions from memor
 
 By placing a breakpoint at `0x00400aea`, we can see the 7 values compared to our obfuscated coordinates and save them. These are the obtained values:
 
-~~~~
+```
 0x1cc 0x5c2 0x04e 0x186 0x394 0x0e0 0x61c
-~~~~
+```
 
 Of course, these are obfuscated with the same transformations applied to the current coordinates, so we still don't have the positions for the 7 bombs. At this point, I thought of writing a "deobfuscation" function that could obtain the coordinates for every obfuscated value. But after some minutes of trying, I started to see maybe there was an easier way.
 
 We are playing in a 40x20 map. That's 800 possible XY combinations where our rover can be at a given time, without taking obstacles into consideration. That is a very reasonable value to try a "brute-force" attack, as if the positions of the bombs where hashed and we were trying to crack them. And coding the obfuscation function is way easier, as it's only a matter of translating assembly to Python. The following script accomplishes exactly that:
 
-~~~~python
+```python
 def obfuscate(x, y):
   temp = x*64
   temp = temp & 1984
@@ -274,11 +274,11 @@ for x in range(40):
     if value in values:
       print x,y,hex(value)
       values.remove(value)
-~~~~
+```
 
 Drum roll, please!
 
-~~~~bash
+```bash
 $ python bombs.py
 1 7 0x4e
 3 16 0xe0
@@ -287,7 +287,7 @@ $ python bombs.py
 14 10 0x394
 23 1 0x5c2
 24 14 0x61c
-~~~~
+```
 
 *Hacker voice*: Got it.
 
@@ -303,7 +303,7 @@ But even with this trick, I kept writing paths of >190 movements, and the batter
 
 Needless to say, that led to nowhere. After an undisclosed amount of hours, I fell back into the good old manually counting positions and discovered a few optimization errors in my path. I reduced it to 185, then 183, and then, finally, 179 movements. It ultimately looked like this:
 
-~~~~
+```
 $ cat robot_instructions
 ^>>y
 <<vv<v>vvv>>^>^>^>>>>>>>>>>v<v<<<^y
@@ -312,11 +312,11 @@ v>>vv<vv>>>>>>>>>>>>>>>^^<<<<<<y
 >>>>>>>vv<<<<<<<<<<<<<<<<<<<<<vvv<<y
 ^<<<<<<vy
 vvvvv>>>>vv<<y
-~~~~
+```
 
 Was it victory?
 
-~~~~
+```
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 X                   \                  X
 X                    \########         X
@@ -338,7 +338,7 @@ X                                      X
 X                                      X
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 You saved us all, thank you!
-~~~~
+```
 
 Yay!
 
