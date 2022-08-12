@@ -10,6 +10,7 @@ permalink: /research/
 
 ## Advisories
 
+* [GHSL-2022-046](https://securitylab.github.com/advisories/GHSL-2022-046_WordPress_for_Android/) (Intent URI permissions manipulation in WordPress for Android)
 * [GHSL-2021-1054 and GHSL-2021-1055](https://securitylab.github.com/advisories/GHSL-2021-1054_GHSL-2021-1055_log4j2/) (Unsafe Deserialization in Log4j2 2.15.0)
 * [CVE-2021-41256](https://securitylab.github.com/advisories/GHSL-2021-1033_Nextcloud_News_for_Android/) (Intent URI permissions manipulation in Nextcloud News for Android)
 * [CVE-2021-43863](https://securitylab.github.com/advisories/GHSL-2021-1007-Nextcloud_Android_app/#issue-1-sql-injection-in-filecontentprovider-ghsl-2021-1007) (SQL Injection in `FileContentProvider` in Nextcloud for Android)
