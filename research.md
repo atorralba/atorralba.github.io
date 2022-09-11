@@ -10,6 +10,7 @@ permalink: /research/
 
 ## Advisories
 
+* [CVE-2022-29158](https://securitylab.github.com/advisories/GHSL-2022-025_Apache_OFBiz/) (Regular Expression Denial of Service (ReDoS) in Apache OFBiz
 * [GHSL-2022-024](https://securitylab.github.com/advisories/GHSL-2022-024_Azure_SDK_for_Java/) (Regular Expression Denial of Service (ReDoS) in the Azure SDK for Java)
 * [GHSL-2022-023](https://securitylab.github.com/advisories/GHSL-2022-023_Apache_Ignite/) (Regular Expression Denial of Service (ReDoS) in Apache Ignite)
 * [CVE-2022-31781](https://securitylab.github.com/advisories/GHSL-2022-022_Apache_Tapestry/) (Regular Expression Denial of Service (ReDoS) in Apache Tapestry)
