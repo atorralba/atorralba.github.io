@@ -7,7 +7,7 @@ permalink: /research/
 ## Public talks
 
 * [To the Upside Down and back: Destapando CVEs en aplicaciones Android desde dos mundos @ Navaja Negra X Edition](https://www.twitch.tv/videos/1649593269?t=7000s) (in Spanish)
-* [Find vulnerable Kotlin apps while testing CodeQL @ GitHub Universe 2022](https://watch.githubuniverse.com/on-demand/ee811c3f-d3e1-4d6b-843d-d8e637742aca)
+* [Find vulnerable Kotlin apps while testing CodeQL @ GitHub Universe 2022](https://www.youtube.com/watch?v=P1wqo276KjU)
 * [Security as Code: A DevSecOps Approach @ SpringOne 2021](https://www.youtube.com/watch?v=HQ7oVA0-N1o)
 
 ## Advisories
