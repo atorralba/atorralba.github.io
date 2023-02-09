@@ -12,6 +12,8 @@ permalink: /research/
 
 ## Advisories
 
+* [CVE-2023-24804](https://securitylab.github.com/advisories/GHSL-2022-059_GHSL-2022-060_Owncloud_Android_app/#issue-2-insufficient-path-validation-in-receiveexternalfilesactivityjava-ghsl-2022-060) (Insufficient path validation in ownCloud Android app)
+* [CVE-2023-23948](https://securitylab.github.com/advisories/GHSL-2022-059_GHSL-2022-060_Owncloud_Android_app/#issue-1-sql-injection-in-filecontentproviderkt-ghsl-2022-059) (SQL Injection in ownCloud Android app)
 * [CVE-2022-39349](https://securitylab.github.com/advisories/GHSL-2022-062_Tasks_org/) (Arbitrary File Read in Tasks.org Android app)
 * [CVE-2022-29158](https://securitylab.github.com/advisories/GHSL-2022-025_Apache_OFBiz/) (Regular Expression Denial of Service (ReDoS) in Apache OFBiz
 * [GHSL-2022-024](https://securitylab.github.com/advisories/GHSL-2022-024_Azure_SDK_for_Java/) (Regular Expression Denial of Service (ReDoS) in the Azure SDK for Java)
