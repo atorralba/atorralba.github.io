@@ -12,6 +12,10 @@ permalink: /research/
 
 ## Advisories
 
+* [CVE-2023-32991, CVE-2023-32992](https://securitylab.github.com/advisories/GHSL-2023-055_SAML_Single_Sign_On__SSO__for_Jenkins/) (XML external entity (XXE) or server-side request forgery (SSRF) in SAML SSO Jenkins Plugin)
+* [CVE-2023-32986](https://securitylab.github.com/advisories/GHSL-2023-077_File_Parameters_Plugin/) (Arbitrary file write in the File Parameters Jenkins Plugin)
+* [CVE-2023-32985](https://securitylab.github.com/advisories/GHSL-2023-076_Sidebar_Link_Plug-in_for_Jenkins/) (Information disclosure in the Sidebar Link Plug-in for Jenkins)
+* [CVE-2023-32981](https://securitylab.github.com/advisories/GHSL-2023-058_GHSL-2023-059_Pipeline_Utility_Steps_Plugin/) (ZipSlip in Jenkins Pipeline Utility Steps Plugin)
 * [CVE-2023-24804](https://securitylab.github.com/advisories/GHSL-2022-059_GHSL-2022-060_Owncloud_Android_app/#issue-2-insufficient-path-validation-in-receiveexternalfilesactivityjava-ghsl-2022-060) (Insufficient path validation in ownCloud Android app)
 * [CVE-2023-23948](https://securitylab.github.com/advisories/GHSL-2022-059_GHSL-2022-060_Owncloud_Android_app/#issue-1-sql-injection-in-filecontentproviderkt-ghsl-2022-059) (SQL Injection in ownCloud Android app)
 * [CVE-2022-39349](https://securitylab.github.com/advisories/GHSL-2022-062_Tasks_org/) (Arbitrary File Read in Tasks.org Android app)
