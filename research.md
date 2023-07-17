@@ -12,6 +12,8 @@ permalink: /research/
 
 ## Advisories
 
+* [CVE-2023-37960](https://securitylab.github.com/advisories/GHSL-2023-079_Jenkins_MathWorks_Polyspace_Plugin/) (Arbitrary File Exfiltration in Jenkins MathWorks Polyspace Plugin)
+* [CVE-2023-37942](https://securitylab.github.com/advisories/GHSL-2023-056_Jenkins_External_Monitor_Job_Plugin/) (XML external entity (XXE) in Jenkins External Monitor Job Plugin)
 * [CVE-2023-36480](https://securitylab.github.com/advisories/GHSL-2023-044_Aerospike_Java_Client/) (Unsafe Deserialization in Aerospike Java client)
 * [CVE-2023-35947](https://securitylab.github.com/advisories/GHSL-2023-120_Gradle/) (Arbitrary File Read/Write during TAR extraction in Gradle)
 * [CVE-2023-35147](https://securitylab.github.com/advisories/GHSL-2023-054_AWS_CodeCommit_Trigger_Plugin/) (Unauthenticated arbitrary file read in Jenkins plugin 3.0.12)
