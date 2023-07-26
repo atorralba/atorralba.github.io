@@ -12,6 +12,7 @@ permalink: /research/
 
 ## Advisories
 
+* [CVE-2023-37471](https://securitylab.github.com/advisories/GHSL-2023-143_GHSL-2023-144_OpenAM/) (SAML signature validation bypass in OpenAM)
 * [CVE-2023-37960](https://securitylab.github.com/advisories/GHSL-2023-079_Jenkins_MathWorks_Polyspace_Plugin/) (Arbitrary File Exfiltration in Jenkins MathWorks Polyspace Plugin)
 * [CVE-2023-37942](https://securitylab.github.com/advisories/GHSL-2023-056_Jenkins_External_Monitor_Job_Plugin/) (XML external entity (XXE) in Jenkins External Monitor Job Plugin)
 * [CVE-2023-36480](https://securitylab.github.com/advisories/GHSL-2023-044_Aerospike_Java_Client/) (Unsafe Deserialization in Aerospike Java client)
