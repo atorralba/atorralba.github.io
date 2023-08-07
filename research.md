@@ -17,7 +17,7 @@ permalink: /research/
 * [CVE-2023-37942](https://securitylab.github.com/advisories/GHSL-2023-056_Jenkins_External_Monitor_Job_Plugin/) (XML external entity (XXE) in Jenkins External Monitor Job Plugin)
 * [CVE-2023-36480](https://securitylab.github.com/advisories/GHSL-2023-044_Aerospike_Java_Client/) (Unsafe Deserialization in Aerospike Java client)
 * [CVE-2023-35947](https://securitylab.github.com/advisories/GHSL-2023-120_Gradle/) (Arbitrary File Read/Write during TAR extraction in Gradle)
-* [CVE-2023-35147](https://securitylab.github.com/advisories/GHSL-2023-054_AWS_CodeCommit_Trigger_Plugin/) (Unauthenticated arbitrary file read in Jenkins plugin 3.0.12)
+* [CVE-2023-35147](https://securitylab.github.com/advisories/GHSL-2023-054_AWS_CodeCommit_Trigger_Plugin/) (Unauthenticated arbitrary file read in AWS CodeCommit Trigger Jenkins Plugin)
 * [CVE-2023-33188](https://securitylab.github.com/advisories/GHSL-2022-065_Omni-Notes/) (Insufficient Path Validation in Omni-Notes Android App)
 * [CVE-2023-32991, CVE-2023-32992](https://securitylab.github.com/advisories/GHSL-2023-055_SAML_Single_Sign_On__SSO__for_Jenkins/) (XML external entity (XXE) or server-side request forgery (SSRF) in SAML SSO Jenkins Plugin)
 * [CVE-2023-32986](https://securitylab.github.com/advisories/GHSL-2023-077_File_Parameters_Plugin/) (Arbitrary file write in the File Parameters Jenkins Plugin)
