@@ -12,6 +12,7 @@ permalink: /research/
 
 ## Advisories
 
+* [CVE-2023-45146](https://securitylab.github.com/advisories/GHSL-2023-052_XXL-RPC/) (Unsafe deserialization in XXL-RPC)
 * [CVE-2023-42809](https://securitylab.github.com/advisories/GHSL-2023-053_Redisson/) (Unsafe deserialization in Redisson)
 * [CVE-2023-41937](https://securitylab.github.com/advisories/GHSL-2023-114_Bitbucket_Push_and_Pull_Request_Plugin/) (SSRF in Bitbucket Push and Pull Request Jenkins Plugin)
 * [CVE-2023-37960](https://securitylab.github.com/advisories/GHSL-2023-079_Jenkins_MathWorks_Polyspace_Plugin/) (Arbitrary File Exfiltration in Jenkins MathWorks Polyspace Plugin)
