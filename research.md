@@ -12,7 +12,7 @@ permalink: /research/
 
 ## Advisories
 
-* [CVE-2023-41898](https://github.com/home-assistant/core/security/advisories/GHSA-jvpm-q3hq-86rg) (Arbitrary URL load in Android WebView in Home Assistant Companion for Android)
+* [CVE-2023-41898](https://github.blog/2023-11-30-securing-our-home-labs-home-assistant-code-review/#cve-2023-41898-ghsl-2023-142arbitrary-url-load-in-android-webview-in-myactivity-kt) (Arbitrary URL load in Android WebView in Home Assistant Companion for Android)
 * [CVE-2023-45146](https://securitylab.github.com/advisories/GHSL-2023-052_XXL-RPC/) (Unsafe deserialization in XXL-RPC)
 * [CVE-2023-42809](https://securitylab.github.com/advisories/GHSL-2023-053_Redisson/) (Unsafe deserialization in Redisson)
 * [CVE-2023-41937](https://securitylab.github.com/advisories/GHSL-2023-114_Bitbucket_Push_and_Pull_Request_Plugin/) (SSRF in Bitbucket Push and Pull Request Jenkins Plugin)
