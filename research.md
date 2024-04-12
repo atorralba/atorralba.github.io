@@ -12,6 +12,7 @@ permalink: /research/
 
 ## Advisories
 
+* [CVE-2024-31450](https://securitylab.github.com/advisories/GHSL-2023-277_Owncast/) (Arbitrary file deletion in Owncast)
 * [CVE-2024-29031](https://securitylab.github.com/advisories/GHSL-2023-249_Meshery/) (SQL Injection in Meshery)
 * [CVE-2023-41898](https://github.blog/2023-11-30-securing-our-home-labs-home-assistant-code-review/#cve-2023-41898-ghsl-2023-142arbitrary-url-load-in-android-webview-in-myactivity-kt) (Arbitrary URL load in Android WebView in Home Assistant Companion for Android)
 * [CVE-2023-45146](https://securitylab.github.com/advisories/GHSL-2023-052_XXL-RPC/) (Unsafe deserialization in XXL-RPC)
